@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도서관 관리 시스템</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+    <h1>도서관 관리 시스템</h1>
+    <nav>
+        <a href="/users">회원 관리</a>
+        <a href="/books">도서 관리</a>
+        <a href="/borrows">대출 관리</a>
+    </nav>
+</header>
+<main>
+    <div th:replace="~{::content}"></div>
+</main>
+<footer>
+    <p>&copy; 2024 도서관 관리 시스템</p>
+</footer>
+</body>
+</html>
