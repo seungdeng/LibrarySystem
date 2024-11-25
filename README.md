@@ -41,20 +41,20 @@ src/main/java/com/example/library
 └── LibraryApplication.java # Spring Boot 메인 클래스
 <br><br>
 
-🚀 REST API
-도서 API
-GET /books: 도서 목록 및 검색 결과 반환.
-POST /books: 새 도서 추가.
-대출 API
-GET /borrows: 현재 사용자의 대출 기록 반환.
-POST /borrows/borrow: 도서 대출.
-POST /borrows/return: 도서 반납.
-사용자 API
-POST /users: 사용자 등록.
+🚀 REST API<br>
+도서 API<br>
+GET /books: 도서 목록 및 검색 결과 반환.<br>
+POST /books: 새 도서 추가.<br>
+대출 API<br>
+GET /borrows: 현재 사용자의 대출 기록 반환.<br>
+POST /borrows/borrow: 도서 대출.<br>
+POST /borrows/return: 도서 반납.<br>
+사용자 API<br>
+POST /users: 사용자 등록.<br><br>
 
 🛠️ 기능 구현 상세
 도서 검색 및 페이징
-<br><br>
+<br>
 사용자는 검색어 입력과 페이지 이동 버튼을 통해 검색 결과를 탐색할 수 있습니다.<br>
 각 페이지는 최대 15개의 도서를 표시합니다.<br>
 <br>
