@@ -12,6 +12,11 @@
     <a href="/books">도서 목록</a> |
     <a th:href="@{/borrows(username=${userName})}">대출 및 반납</a>
 </nav>
+
+<form th:action="@{/books}" method="get">
+    <input type="text" name="keyword" placeholder="책 이름 검색" th:value="${keyword}" />
+    <button type="submit">검색</button>
+</form>
 <table border="1">
     <thead>
     <tr>
@@ -41,5 +46,40 @@
     </tr>
     </tbody>
 </table>
+<!-- 페이지 이동 -->
+<div>
+    <!-- 이전 버튼 -->
+    <button th:if="${currentPage > 0}"
+            th:onclick="|location.href='@{/books(keyword=${keyword}, page=${currentPage - 1})}'|">
+        이전
+    </button>
+
+    <!-- 현재 페이지와 전체 페이지 -->
+    <span th:text="${currentPage + 1} + '/' + ${totalPages}"></span>
+
+    <!-- 다음 버튼 -->
+    <button th:if="${currentPage + 1 < totalPages}"
+            th:onclick="|location.href='@{/books(keyword=${keyword}, page=${currentPage + 1})}'|">
+        다음
+    </button>
+
+    <!-- 페이지 번호 입력 폼 -->
+    <form th:action="@{/books}" method="get" style="display:inline;">
+        <input type="hidden" name="keyword" th:value="${keyword}" />
+        <input id="pageInput" type="number" name="page" min="1" th:max="${totalPages}" placeholder="페이지 번호" />
+        <button type="submit" onclick="adjustPageNum()">이동</button>
+    </form>
+</div>
+
+<script>
+    // 페이지 번호 조정 함수(페이지 숫자입력시 +1되는현상 수정)
+    function adjustPageNum() {
+        const pageInput = document.getElementById("pageInput");
+        if (pageInput && pageInput.value) {
+            pageInput.value = pageInput.value - 1; // 1을 뺀 값으로 설정
+        }
+    }
+</script>
+
 </body>
 </html>

@@ -20,26 +20,24 @@ public class BookController {
     // HTML 렌더링 메서드
     @GetMapping
     public String getBooksPage(
-            @RequestParam(value = "keyword", required = false) String keyword, // 검색어
-            @RequestParam(value = "page", defaultValue = "0") int page, // 페이지 번호
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0") int page,
             HttpSession session,
             Model model
     ) {
         if (session.getAttribute("userName") == null) {
-            return "redirect:/login"; // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
+            return "redirect:/login";
         }
 
-        int pageSize = 15; // 페이지당 항목 수
-
-        // 검색 및 페이징 처리
+        int pageSize = 15; // 한 페이지에 표시할 항목 수
         Page<Book> bookPage = bookService.getBooks(keyword, page, pageSize);
 
-        // 모델에 데이터 전달
-        model.addAttribute("books", bookPage.getContent()); // 현재 페이지 데이터
-        model.addAttribute("totalPages", bookPage.getTotalPages()); // 전체 페이지 수
-        model.addAttribute("currentPage", page); // 현재 페이지 번호
-        model.addAttribute("keyword", keyword); // 검색어 유지
+        model.addAttribute("books", bookPage.getContent());
+        model.addAttribute("totalPages", bookPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("keyword", keyword);
 
-        return "books"; // books.html 템플릿 반환
+        return "books";
     }
 }
+
