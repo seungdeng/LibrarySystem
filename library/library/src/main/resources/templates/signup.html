@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>로그인</title>
+  <title>회원가입</title>
 </head>
 <body>
-<h1>로그인</h1>
-<form method="post" action="/login">
+<h1>회원가입</h1>
+<form method="post" action="/users/signup"> <!-- POST 요청으로 서버로 전송 -->
   <label for="username">아이디:</label>
   <input type="text" id="username" name="username" required>
+  <br>
+  <label for="name">이름:</label>
+  <input type="text" id="name" name="name" required>
   <br>
   <label for="password">비밀번호:</label>
   <input type="password" id="password" name="password" required>
   <br>
-  <button type="submit">로그인</button>
+  <button type="submit">회원가입</button>
 </form>
-<a href="/users/signup">회원가입</a>
+<a href="/login">로그인</a>
 </body>
 </html>

@@ -32,4 +32,8 @@ public class Book {
 
     @Column(name = "created_at")
     private String createdAt;
+
+    @Column(name = "no_of_copies", nullable = false) // 대출 가능한 수량
+    private Integer noOfCopies;
+
     }

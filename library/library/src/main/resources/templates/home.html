@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,13 +11,13 @@
     <nav>
         <a href="/">홈</a> |
         <a href="/books">도서 목록</a> |
-        <a href="/borrows">대출 및 반납</a>
+        <a th:href="@{/borrows(username=${userName})}">대출 및 반납</a>
         <span th:if="${userName != null}">
-                | <a href="/logout">로그아웃</a>
-            </span>
+            | <a href="/logout">로그아웃</a>
+        </span>
         <span th:if="${userName == null}">
-                | <a href="/login">로그인</a>
-            </span>
+            | <a href="/login">로그인</a>
+        </span>
     </nav>
 </header>
 <main>

@@ -4,6 +4,8 @@ import com.example.library.entity.User;
 import com.example.library.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +43,17 @@ public class LoginController {
             return "login"; // login.html 반환
         }
     }
+    @GetMapping("/home")
+    public String homePage(HttpSession session) {
+        // 현재 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // 현재 로그인한 사용자 이름
 
+        // 세션에 사용자 정보 저장
+        session.setAttribute("userName", username);
+
+        return "home"; // home.html 반환
+    }
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate(); // 세션 무효화

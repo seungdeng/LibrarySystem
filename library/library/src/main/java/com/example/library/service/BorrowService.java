@@ -9,14 +9,17 @@ import java.util.List;
 
 @Service
 public class BorrowService {
+
     @Autowired
     private BorrowRepository borrowRepository;
 
-    public List<Borrow> getAllBorrows() {
-        return borrowRepository.findAll();
-    }
-
+    // 대출 기록 저장
     public Borrow saveBorrow(Borrow borrow) {
         return borrowRepository.save(borrow);
+    }
+
+    // 유저별 대출 기록 조회
+    public List<Borrow> getBorrowsByUsername(String username) {
+        return borrowRepository.findByUsername(username);
     }
 }

@@ -1,24 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대출 및 반납</title>
+    <title>대출 기록</title>
 </head>
 <body>
-<header>
-    <h1>도서 관리 시스템</h1>
-    <nav>
-        <!-- 메뉴 -->
-        <a href="/">홈</a> |
-        <a href="/books">도서 목록</a> |
-        <a href="/borrows">대출 및 반납</a>
-    </nav>
-</header>
-<main>
-    <h2>대출 및 반납</h2>
-    <p>이 페이지는 대출 및 반납 정보를 표시합니다.</p>
-    <!-- 추가 기능 구현 -->
-</main>
+<h1>대출 기록</h1>
+<nav>
+    <a th:href="@{/}">홈</a> |
+    <a th:href="@{/books}">도서 목록</a> |
+    <a th:href="@{/logout}">로그아웃</a>
+</nav>
+<table border="1">
+    <thead>
+    <tr>
+        <th>책 ID</th>
+        <th>대출일</th>
+        <th>반납 기한</th>
+        <th>상태</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="borrow : ${borrows}">
+        <td th:text="${borrow.bookId}"></td>
+        <td th:text="${borrow.borrowedAt}"></td>
+        <td th:text="${borrow.dueDate}"></td>
+        <td th:text="${borrow.status}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
