@@ -5,7 +5,11 @@ import com.example.library.entity.Borrow;
 import com.example.library.service.BookService;
 import com.example.library.service.BorrowService;
 import com.example.library.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,14 +34,17 @@ public class BorrowController {
 
     // 대출 처리
     @PostMapping("/borrow")
-    public String borrowBook(@RequestParam String username, @RequestParam Integer bookId, Model model) {
+    public String borrowBook(@RequestParam Integer bookId, HttpSession session, Model model) {
+        // 세션에서 username 가져오기
+        String username = (String) session.getAttribute("userName");
+
+        if (username == null) {
+            model.addAttribute("error", "로그인 정보가 없습니다.");
+            return "error"; // 로그인 정보가 없으면 에러 페이지로 이동
+        }
+
         try {
             System.out.println("대출 요청 username: " + username);
-
-            // 유효성 검사: username이 존재하는지 확인
-            if (!userService.existsByUsername(username)) {
-                throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
-            }
 
             // 책 정보 가져오기
             Book book = bookService.findById(bookId);
@@ -48,7 +55,7 @@ public class BorrowController {
             // 대출 처리
             Borrow borrow = new Borrow();
             borrow.setUsername(username);
-            borrow.setBookId(bookId);
+            borrow.setBook(book); // book 객체를 대출에 연결
             borrow.setBorrowedAt(LocalDateTime.now());
             borrow.setDueDate(LocalDateTime.now().plusMonths(1));
             borrowService.saveBorrow(borrow);
@@ -57,10 +64,9 @@ public class BorrowController {
             book.setNoOfCopies(book.getNoOfCopies() - 1);
             bookService.saveBook(book);
 
-            return "redirect:/borrows?username=" + username; // 대출 완료 후 대출 목록 페이지로 이동
+            return "redirect:/borrows"; // 대출 완료 후 대출 목록 페이지로 이동
 
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            // 오류 메시지를 모델에 추가
+        } catch (IllegalStateException e) {
             model.addAttribute("error", e.getMessage());
             return "error"; // 에러 페이지로 이동
         }
@@ -68,11 +74,59 @@ public class BorrowController {
 
     // 유저 대출 기록 조회
     @GetMapping("/borrows")
-    public String getUserBorrows(@RequestParam String username, Model model) {
+    public String getUserBorrows(HttpSession session, Model model) {
+        // 세션에서 username 가져오기
+        String username = (String) session.getAttribute("userName");
+
+        if (username == null) {
+            model.addAttribute("error", "로그인 정보가 없습니다.");
+            return "error"; // 로그인 정보가 없으면 에러 페이지로 이동
+        }
+
         System.out.println("대출 기록 조회 username: " + username);
         List<Borrow> borrows = borrowService.getBorrowsByUsername(username);
-        model.addAttribute("borrows", borrows);
-        return "borrows"; // borrows.html로 이동
+
+        model.addAttribute("borrows", borrows); // Borrow 객체들을 그대로 모델에 추가
+        model.addAttribute("username", username); // 세션에 있는 username도 전달
+        return "borrows"; // borrows.html 반환
+    }
+
+    @PostMapping("/return")
+    public String returnBook(@RequestParam Integer borrowId, HttpSession session, Model model) {
+        // 세션에서 username 가져오기
+        String username = (String) session.getAttribute("userName");
+
+        if (username == null) {
+            model.addAttribute("error", "로그인 정보가 없습니다.");
+            return "error"; // 로그인 정보가 없으면 에러 페이지로 이동
+        }
+
+        try {
+            Borrow borrow = borrowService.findByUsernameAndId(username, borrowId); // 예외가 발생하면 catch로 넘어감
+
+            Book book = bookService.findById(borrow.getBook().getId()); // borrow에서 book 객체 가져오기
+            if (book == null) {
+                model.addAttribute("error", "해당 책을 찾을 수 없습니다.");
+                return "error";
+            }
+
+            // 대출 상태가 "반납 완료"인 경우에는 반납 버튼을 숨김
+            if (borrow.getStatus() != null && borrow.getStatus().equals("반납 완료")) {
+                model.addAttribute("error", "이미 반납된 도서입니다.");
+                return "error";
+            }
+
+            // 반납 처리
+            borrow.setStatus("반납 완료");
+            borrowService.saveBorrow(borrow); // 상태 저장
+            book.setNoOfCopies(book.getNoOfCopies() + 1); // 책 수량 증가
+            bookService.saveBook(book);
+
+            return "redirect:/borrows"; // 대출 목록 페이지로 리다이렉트
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "error";
+        }
     }
 
     // 예외 처리: IllegalArgumentException
