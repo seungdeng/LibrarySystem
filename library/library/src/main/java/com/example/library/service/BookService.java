@@ -17,6 +17,12 @@ public class BookService {
     }
 
     public Book saveBook(Book book) {
+
         return bookRepository.save(book);
+    }
+
+    public List<Book> searchBooks(String keyword) {
+        // BookRepository에 정의된 메서드 호출
+        return bookRepository.findByBookNameContainingOrBookAuthorContainingOrCompanyContaining(keyword, keyword, keyword);
     }
 }

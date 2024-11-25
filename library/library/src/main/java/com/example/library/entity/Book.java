@@ -24,14 +24,12 @@ public class Book {
     @Column(name = "book_genre")
     private String bookGenre;
 
-    @Column(name = "no_of_copies", nullable = false)
-    private Integer noOfCopies;
+    @Column(name = "company")
+    private String company;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "sign")
+    private String sign;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now(); // 자동으로 현재 시간 설정
+    @Column(name = "created_at")
+    private String createdAt;
     }
-}

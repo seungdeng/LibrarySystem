@@ -16,21 +16,24 @@
 <table border="1">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>제목</th>
+        <th>이름</th>
         <th>저자</th>
+        <th>출판사</th>
         <th>장르</th>
-        <th>수량</th>
+        <th>출시년도</th>
+        <th>일련번호</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="book : ${books}">
-        <td th:text="${book.id}"></td>
+        <tr th:each="book : ${books}">
         <td th:text="${book.bookName}"></td>
         <td th:text="${book.bookAuthor}"></td>
+        <td th:text="${book.company}"></td>
         <td th:text="${book.bookGenre}"></td>
-        <td th:text="${book.noOfCopies}"></td>
+        <td th:text="${book.createdAt}"></td>
+        <td th:text="${book.sign}"></td>
     </tr>
+
     </tbody>
 </table>
 </body>
