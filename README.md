@@ -35,7 +35,7 @@ Spring Boot와 MySQL을 기반으로 구축되었으며, 효율적인 데이터 
 ## 📂 프로젝트 구조
 src/main/java/com/example/library <br>
 ├── controller # Spring MVC 컨트롤러 <br>
-├── entity # 데이터베이스 엔티 <br>
+├── entity # 데이터베이스 엔티티 <br>
 ├── repository # JPA 리포지토리 인터페이스 <br>
 ├── service # 서비스 계층 <br>
 └── LibraryApplication.java # Spring Boot 메인 클래스
